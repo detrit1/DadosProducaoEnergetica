@@ -1,0 +1,166 @@
+# 📊 Análise de Produção de Petróleo com Python e MySQL
+
+Este projeto realiza o processamento, limpeza, análise e armazenamento de dados de produção de petróleo a partir de arquivos CSV, utilizando Python, Pandas e MySQL.
+
+---
+
+## 🚀 Funcionalidades
+
+* 📂 Leitura de múltiplos arquivos CSV automaticamente
+* 🧹 Tratamento de dados inconsistentes:
+
+  * Remoção de BOM (`\ufeff`)
+  * Padronização de colunas
+  * Conversão de números no formato brasileiro (`1.234,56 → 1234.56`)
+* 🔄 Conversão para JSON
+* 🗄️ Armazenamento em banco de dados MySQL
+* 📊 Geração de visualizações com Pandas e Matplotlib
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+* Python 3.x
+* Pandas
+* Matplotlib
+* MySQL
+* mysql-connector-python
+
+---
+
+## 📁 Estrutura do projeto
+
+```
+📦 projeto
+ ┣ 📂 dados/                  # arquivos CSV de entrada
+ ┣ 📄 conversaoJSON.py       # script de conversão e limpeza
+ ┣ 📄 dados_filtrados.json   # dados processados
+ ┣ 📄 database.py            # inserção no MySQL
+ ┣ 📄 analise.py             # geração de gráficos
+ ┗ 📄 README.md
+```
+
+---
+
+## ⚙️ Como executar
+
+### 1. Clone o repositório
+
+```
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+```
+
+---
+
+### 2. Instale as dependências
+
+```
+pip install pandas matplotlib mysql-connector-python
+```
+
+---
+
+### 3. Execute o processamento dos dados
+
+```
+python conversaoJSON.py
+```
+
+Isso irá gerar o arquivo:
+
+```
+dados_filtrados.json
+```
+
+---
+
+### 4. Configure o banco de dados MySQL
+
+No MySQL:
+
+```sql
+CREATE DATABASE producao_db;
+```
+
+---
+
+### 5. Execute a inserção no banco
+
+Edite as credenciais no arquivo `database.py`:
+
+```python
+host="localhost"
+user="root"
+password="SUA_SENHA"
+database="producao_db"
+```
+
+Depois execute:
+
+```
+python database.py
+```
+
+---
+
+### 6. Executar análise e gráficos
+
+```
+python analise.py
+```
+
+---
+
+## 📊 Exemplos de análises
+
+* Produção por ano
+* Distribuição por estado
+* Bacias mais produtivas
+* Instalações mais ativas
+* Evolução temporal
+
+---
+
+## ⚠️ Desafios tratados
+
+Durante o desenvolvimento, foram resolvidos problemas comuns de dados reais:
+
+* Inconsistência nos nomes das colunas
+* Encoding (UTF-8 com BOM)
+* Dados numéricos como string
+* Diferentes formatos de CSV
+
+---
+
+## 📈 Possíveis melhorias
+
+* Dashboard interativo (Plotly / Dash)
+* API REST (Flask ou FastAPI)
+* Normalização do banco de dados
+* Integração com ferramentas de BI
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por Maurício Fabiano Azevedo e Pedro Stachuka
+
+---
+
+## 📄 Licença
+
+Este projeto é de uso acadêmico e livre para estudos.
+
+---
+
+## 📂 Fonte dos Dados
+
+Os dados utilizados neste projeto foram obtidos a partir do portal oficial de dados abertos do governo brasileiro:
+
+🔗 https://dados.gov.br/home
+
+A plataforma reúne datasets públicos de diversas áreas, promovendo transparência e acesso à informação.  
+Os dados utilizados referem-se à produção de petróleo e gás, sendo disponibilizados para uso público conforme as políticas de dados abertos.
+
+Recomenda-se consultar a fonte original para mais detalhes sobre atualização, metodologia e possíveis limitações dos dados.
