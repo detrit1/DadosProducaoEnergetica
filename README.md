@@ -1,177 +1,85 @@
-# Análise de Produção de Petróleo com Python e MySQL
+# Analise de Producao de Petroleo
 
-Este projeto realiza o processamento, limpeza, análise e armazenamento de dados de produção de petróleo a partir de arquivos CSV, utilizando Python, Pandas e MySQL.
-
----
+Este projeto processa arquivos CSV de producao energetica, gera JSON consolidado, calcula estatisticas e pode carregar dados no MySQL.
 
 ## Funcionalidades
 
-* Leitura de múltiplos arquivos CSV automaticamente
-* Tratamento de dados inconsistentes
+- Leitura automatica de varios CSVs da pasta `dados/`
+- Tratamento de colunas e normalizacao de valores numericos
+- Conversao para JSON consolidado
+- Calculo de media, maximo e minimo da producao de oleo
+- Geracao opcional de graficos PNG
+- Carga opcional para MySQL
 
-  * Remoção de BOM (`\ufeff`)
-  * Padronização de colunas
-  * Conversão de números no formato brasileiro (1.234,56 → 1234.56)
-* Conversão para JSON
-* Armazenamento em banco de dados MySQL
-* Geração de visualizações com Pandas e Matplotlib
+## Script unico (pipeline)
 
----
+O fluxo completo foi centralizado em [pipeline.py](pipeline.py).
 
-## Tecnologias utilizadas
+### Dependencias
 
-* Python 3.x
-* Pandas
-* Matplotlib
-* MySQL
-* mysql-connector-python
-
----
-
-## Estrutura do projeto
-
-```
-projeto
- ┣ dados/                  # arquivos CSV de entrada
- ┣ conversaoJSON.py       # script de conversão e limpeza
- ┣ dados_filtrados.json   # dados processados
- ┣ database.py            # inserção no MySQL
- ┣ analise.py             # geração de gráficos
- ┗ README.md
-```
-
----
-
-## Como executar
-
-### 1. Clonar o repositório
-
-```
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
-```
-
----
-
-### 2. Instalar as dependências
-
-```
+```bash
 pip install pandas matplotlib mysql-connector-python
 ```
 
----
+### Execucao basica
 
-### 3. Executar o processamento dos dados
-
-```
-python conversaoJSON.py
+```bash
+python3 pipeline.py
 ```
 
-Isso irá gerar o arquivo:
+Saidas principais:
 
-```
-dados_filtrados.json
-```
+- `dados_filtrados.json`
+- Estatisticas no terminal (por ano, estado e bacia)
 
----
+### Gerar graficos
 
-### 4. Configurar o banco de dados MySQL
-
-No MySQL:
-
-```
-CREATE DATABASE producao_db;
+```bash
+python3 pipeline.py --plots
 ```
 
----
+Saida adicional:
 
-### 5. Inserir os dados no banco
+- Pasta `graficos/` com arquivos PNG
 
-Edite as credenciais no arquivo `database.py`:
+### Carregar no MySQL
 
-```
-host="localhost"
-user="root"
-password="SUA_SENHA"
-database="producao_db"
+```bash
+python3 pipeline.py --mysql
 ```
 
-Depois execute:
+Variaveis de ambiente opcionais para conexao:
 
-```
-python database.py
-```
-
----
-
-### 6. Executar análise e gráficos
-
-```
-python analise.py
+```bash
+export DB_HOST=localhost
+export DB_USER=root
+export DB_PASSWORD=SUA_SENHA
+export DB_NAME=producao_db
 ```
 
----
+### Execucao completa
 
-## Exemplos de análises
+```bash
+python3 pipeline.py --plots --mysql
+```
 
-* Produção por ano
-* Distribuição por estado
-* Bacias mais produtivas
-* Instalações mais ativas
-* Evolução temporal
+## Estrutura do projeto
 
----
-
-## Desafios tratados
-
-Durante o desenvolvimento, foram resolvidos problemas comuns de dados reais:
-
-* Inconsistência nos nomes das colunas
-* Encoding (UTF-8 com BOM)
-* Dados numéricos armazenados como string
-* Diferentes formatos de CSV
-
----
+```text
+DadosProducaoEnergetica/
+  dados/
+  pipeline.py
+  conversaoJSON.py
+  graph.py
+  DataBank.py
+  insertJsonData.py
+  testData.py
+  dados_filtrados.json
+  README.md
+```
 
 ## Fonte dos dados
 
-Os dados utilizados neste projeto foram obtidos a partir do portal oficial de dados abertos do governo brasileiro:
+Dados publicos obtidos em:
 
 https://dados.gov.br/home
-
-A plataforma reúne datasets públicos de diversas áreas e permite o uso livre dos dados, conforme suas diretrizes.
-
----
-
-## Possíveis melhorias
-
-* Desenvolvimento de dashboard interativo
-* Criação de API REST
-* Normalização do banco de dados
-* Integração com ferramentas de Business Intelligence
-
----
-
-## Autor
-
-Pedro Stachuka
-
----
-
-## Licença
-
-Este projeto é de uso acadêmico e livre para estudos.
-Fonte dos Dados
-
----
-
-## Fonte
-
-Os dados utilizados neste projeto foram obtidos a partir do portal oficial de dados abertos do governo brasileiro:
-
-🔗 https://dados.gov.br/home
-
-A plataforma reúne datasets públicos de diversas áreas, promovendo transparência e acesso à informação.  
-Os dados utilizados referem-se à produção de petróleo e gás, sendo disponibilizados para uso público conforme as políticas de dados abertos.
-
-Recomenda-se consultar a fonte original para mais detalhes sobre atualização, metodologia e possíveis limitações dos dados.
