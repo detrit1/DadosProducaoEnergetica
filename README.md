@@ -161,3 +161,17 @@ Pedro Stachuka
 ## Licença
 
 Este projeto é de uso acadêmico e livre para estudos.
+Fonte dos Dados
+
+---
+
+## Fonte
+
+Os dados utilizados neste projeto foram obtidos a partir do portal oficial de dados abertos do governo brasileiro:
+
+🔗 https://dados.gov.br/home
+
+A plataforma reúne datasets públicos de diversas áreas, promovendo transparência e acesso à informação.  
+Os dados utilizados referem-se à produção de petróleo e gás, sendo disponibilizados para uso público conforme as políticas de dados abertos.
+
+Recomenda-se consultar a fonte original para mais detalhes sobre atualização, metodologia e possíveis limitações dos dados.
