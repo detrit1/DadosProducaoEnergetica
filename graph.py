@@ -6,6 +6,18 @@ df = pd.read_json("dados_filtrados.json")
 
 # garantir que ano seja numérico
 df["ano"] = pd.to_numeric(df["ano"], errors="coerce")
+df["oleo"] = pd.to_numeric(df["oleo"], errors="coerce")
+
+print("\nEstatísticas de óleo por ano (média, máximo, mínimo):")
+print(df.groupby("ano")["oleo"].agg(["mean", "max", "min"]).round(2))
+
+if "estado" in df.columns:
+    print("\nEstatísticas de óleo por estado (média, máximo, mínimo):")
+    print(df.groupby("estado")["oleo"].agg(["mean", "max", "min"]).round(2))
+
+if "bacia" in df.columns:
+    print("\nEstatísticas de óleo por bacia (média, máximo, mínimo):")
+    print(df.groupby("bacia")["oleo"].agg(["mean", "max", "min"]).round(2))
 
 df.groupby("ano").size().plot(kind="bar")
 plt.title("Registros por Ano")
