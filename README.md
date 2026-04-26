@@ -202,10 +202,6 @@ df = pd.read_csv(CSV_PATH, chunksize=10000)
 
 Projeto acadêmico - Quarto ano, Ciência de Dados
 
-## 👤 Autor
-
-Maurício
-
 ## 🤝 Contribuições
 
 Este é um projeto de estudo. Sugestões e melhorias são bem-vindas via pull requests.
