@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import os
 import logging
 
@@ -7,6 +5,7 @@ import matplotlib.pyplot as plt
 import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
+import numpy as np
 
 CSV_PATH = "./producao_maritima_tratada.csv"
 
@@ -62,21 +61,6 @@ def carregar_dados():
     except Exception as e:
         logging.error(f"Erro ao carregar dados: {e}")
         print("Erro ao carregar dados:", e)
-        return None
-
-
-def filtrar_dados(df):
-    try:
-        anos = sorted(df["ano"].unique())
-        ultimos = anos[-10:]
-        df_filtrado = df[df["ano"].isin(ultimos)].copy()
-
-        logging.info("Filtragem dos últimos 10 anos concluída.")
-        return df_filtrado
-
-    except Exception as e:
-        logging.error(f"Erro ao filtrar dados: {e}")
-        print("Erro ao filtrar dados:", e)
         return None
 
 
@@ -244,11 +228,22 @@ def consultar_dados():
 
 
 def calcular_estatisticas(df):
-    if "producao_oleo_m3" in df.columns:
-        df["producao_oleo_m3"] = pd.to_numeric(df["producao_oleo_m3"], errors="coerce")
+    if "producao_oleo_m3" not in df.columns:
+        print("\nESTATISTICAS: coluna producao_oleo_m3 nao encontrada.")
+        return
 
-    stats = df["producao_oleo_m3"].dropna().describe()
-    print("\nESTATÍSTICAS:\n", stats)
+    df["producao_oleo_m3"] = pd.to_numeric(df["producao_oleo_m3"], errors="coerce")
+    serie = df["producao_oleo_m3"].dropna()
+
+    if serie.empty:
+        print("\nESTATISTICAS: sem dados validos de producao_oleo_m3.")
+        return
+
+    stats = serie.describe().round(2)
+    total = serie.sum()
+    print("\nESTATISTICAS DE PRODUCAO DE OLEO (m3):")
+    print(stats.to_string())
+    print(f"Total acumulado (m3): {total:.2f}")
 
 
 def grafico_barras(df):
@@ -258,9 +253,25 @@ def grafico_barras(df):
     df["producao_oleo_m3"] = pd.to_numeric(df["producao_oleo_m3"], errors="coerce")
     producao_ano = df.groupby("ano")["producao_oleo_m3"].sum()
 
-    plt.figure()
-    plt.bar(producao_ano.index.astype(str), producao_ano.values)
-    plt.savefig(os.path.join(PASTA_SAIDA, "grafico_barras.png"))
+    producao_ano = producao_ano[producao_ano > 0]
+    if producao_ano.empty:
+        return
+
+    plt.figure(figsize=(9, 7))
+
+    cores = plt.cm.tab20(np.linspace(0, 1, len(producao_ano)))
+
+    plt.pie(
+        producao_ano.values,
+        labels=producao_ano.index.astype(str),
+        autopct="%1.1f%%",
+        startangle=90,
+        colors=cores
+    )
+    plt.title("\n Distribuicao da Producao de Oleo por Ano \n")
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig(os.path.join(PASTA_SAIDA, "grafico_pizza.png"))
     plt.close()
 
 
@@ -280,8 +291,13 @@ def grafico_area_empilhada(df):
     if tabela.empty or tabela.shape[1] == 0:
         return
 
-    plt.figure()
-    plt.stackplot(tabela.index, tabela.T.values)
+    plt.figure(figsize=(10, 6))
+    plt.stackplot(tabela.index, tabela.T.values, labels=tabela.columns)
+    plt.title("Producao de Oleo por Ano e Estado")
+    plt.xlabel("Ano")
+    plt.ylabel("Producao de oleo (m3)")
+    plt.legend(loc="upper left", bbox_to_anchor=(1.02, 1), title="Estado")
+    plt.tight_layout()
     plt.savefig(os.path.join(PASTA_SAIDA, "grafico_area.png"))
     plt.close()
 
@@ -290,8 +306,6 @@ def main():
     df = carregar_dados()
     if df is None:
         return
-
-    df = filtrar_dados(df)
 
     if not criar_estrutura():
         print("Erro ao conectar ao MySQL.")
