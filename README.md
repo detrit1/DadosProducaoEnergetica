@@ -79,19 +79,6 @@ venv\Scripts\activate  # Windows
 pip install pandas mysql-connector-python matplotlib numpy
 ```
 
-### Configuração do Banco de Dados
-
-Edite `pipeline_mysql.py` e configure as credenciais MySQL:
-
-```python
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "seu_usuario",
-    "password": "sua_senha",
-    "database": "producao_energetica",  # será criado automaticamente
-}
-```
-
 ### Uso
 
 **Etapa 1: Processar e unificar dados**
